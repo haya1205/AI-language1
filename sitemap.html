@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Language Buddy | Sitemap</title>
+  <style>
+    /* 🌈 Background + Font */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e8f0ff, #b3d4ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      color: #0a3d62;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #004aad;
+      letter-spacing: 1px;
+    }
+
+    /* 🧊 Card Container */
+    .sitemap-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1000px;
+    }
+
+    /* 🧠 Glass Cards */
+    .card {
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      padding: 25px 30px;
+      min-width: 200px;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 100, 255, 0.25);
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .card a {
+      text-decoration: none;
+      color: #004aad;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* 🔹 Sub-links (Dropdown style) */
+    .sub-links {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sub-links a {
+      font-size: 0.95rem;
+      color: #0a3d62;
+      opacity: 0.8;
+      transition: 0.3s;
+    }
+
+    .sub-links a:hover {
+      opacity: 1;
+      color: #0078ff;
+    }
+
+    /* 📱 Responsive */
+    @media (max-width: 768px) {
+      .card {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🌐 AI Language Buddy — Sitemap</h1>
+
+  <div class="sitemap-container">
+
+    <div class="card">
+      <a href="index.html">🏠 Home</a>
+    </div>
+
+    <div class="card">
+      <a href="learn.html">📘 Learn</a>
+      <div class="sub-links">
+        <a href="Vocab.html">🗣 Vocabulary</a>
+        <a href="phrases.html">💬 Phrases</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <a href="quiz.html">🧠 Quiz</a>
+    </div>
+
+    <div class="card">
+      <a href="progress.html">📊 Progress</a>
+    </div>
+
+    <div class="card">
+      <a href="aboutUs.html">👤 About</a>
+    </div>
+
+    <div class="card">
+      <a href="contact.html">✉️ Contact</a>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,419 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Language Buddy — Quiz (Light Blue)</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="./quiz_Game.css">
+<link rel="stylesheet" href="./assets/css/style.css">
+
+  <style>
+    :root{
+      --accent: #2563eb;   /* blue */
+      --accent-2: #60a5fa;
+      --card-radius: 16px;
+      --glow: 0 12px 30px rgba(37,99,235,0.12);
+    }
+    /* Page */
+
+
+ body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px;
+    background: linear-gradient(135deg,#4e6381 0%, #eef7ff 55%, #ffffff 100%);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+    .panel{
+      width:100%;
+      max-width:880px;
+      background: rgba(255,255,255,0.97);
+      border-radius:20px;
+      padding:20px;
+      box-shadow: 0 20px 50px rgba(31,41,55,0.08);
+    }
+
+
+
+    /* Choose cards */
+    .choose-row { gap:18px; }
+    .choose-card{
+      border-radius:var(--card-radius);
+      padding:18px;
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s;
+      border: 1px solid rgba(37,99,235,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(248,250,255,0.95));
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .choose-card .emoji{ font-size:30px; }
+    .choose-card:hover{
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--glow);
+      border-color: rgba(37,99,235,0.14);
+    }
+    .choose-title{ font-weight:700; margin:0; }
+    .small-muted{ color:#6b7280; font-size:0.95rem; }
+
+    /* Quiz area */
+    .question-box{
+      background: linear-gradient(180deg,#ffffff,#fbfdff);
+      border-radius:12px;
+      padding:14px;
+      border:1px solid rgba(15,23,42,0.04);
+      font-weight:600;
+      font-size:1.05rem;
+    }
+    .option-btn{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(15,23,42,0.06);
+      background:white;
+      text-align:left;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .option-btn:hover{ transform: translateY(-3px); }
+    .option-btn.correct{ background:#d1fae5; border-color:#86efac; }
+    .option-btn.wrong{ background:#ffe3e3; border-color:#fca5a5; }
+
+    .ai-hint{
+      background: linear-gradient(90deg, rgba(96,165,250,0.06), rgba(111,66,193,0.03));
+      border:1px dashed rgba(79,70,229,0.1);
+      padding:10px;
+      border-radius:10px;
+      color:#111827;
+      font-size:0.95rem;
+    }
+
+    .muted{ color:#6b7280; font-size:.95rem; }
+
+    @media (max-width:760px){
+      .choose-row{ flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="./assets/images/logo2.svg" alt="Logo">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="learn.html" role="button" data-bs-toggle="dropdown">Learn</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="Vocab.html">Vocabulary</a></li>
+              <li><a class="dropdown-item" href="Phrrases.html">Phrases</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/pages/quiz.html">Quiz</a></li>
+          <li class="nav-item"><a class="nav-link" href="progress.html">Progress</a></li>
+          <li class="nav-item"><a class="nav-link" href="aboutUs.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="panel" id="app">
+    <!-- START -->
+    <div id="startScreen">
+      <div class="d-flex align-items-start justify-content-between mb-2">
+        <div>
+          <h3 class="mb-0">AI Language Buddy</h3>
+          <div class="small-muted">Pick a level — 10 questions each • English only • AI Hint included</div>
+        </div>
+        <div class="text-end">
+          <div class="badge" style="background:linear-gradient(90deg,#eef2ff,#f0f9ff); color:var(--accent); font-weight:600;">🤖 AI Help</div>
+        </div>
+      </div>
+
+      <div class="d-flex choose-row mt-4">
+        <div class="flex-fill">
+          <div class="choose-card" id="easyCard">
+            <div class="emoji">🧠</div>
+            <div>
+              <h5 class="choose-title">Easy Quiz</h5>
+              <div class="small-muted">Beginner-friendly grammar & vocabulary</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-fill">
+          <div class="choose-card" id="hardCard">
+            <div class="emoji">🔥</div>
+            <div>
+              <h5 class="choose-title">Hard Quiz</h5>
+              <div class="small-muted">Challenging grammar & vocabulary</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4 muted">No login • Lightweight • Instant feedback</div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="quizScreen" class="d-none">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div>
+          <div class="muted" id="difficultyLabel">Difficulty</div>
+          <div style="font-weight:700" id="qCounter">Question 1 / 10</div>
+        </div>
+        <div class="text-end">
+          <div class="muted">Score</div>
+          <div style="color:var(--accent); font-weight:700" id="scoreLabel">0</div>
+        </div>
+      </div>
+
+      <div class="progress mb-3" style="height:8px;">
+        <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+      </div>
+
+      <div class="mb-3 question-box" id="questionBox">Loading...</div>
+
+      <div class="row g-2" id="optionsBox" aria-live="polite"></div>
+
+      <div class="d-flex align-items-center justify-content-between mt-3 gap-2">
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary" id="hintBtn">💡 AI Hint</button>
+          <button class="btn btn-outline-secondary" id="homeBtn">🏠 Home</button>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-light" id="prevBtn" disabled>Previous</button>
+          <button class="btn btn-primary" id="nextBtn">Next</button>
+        </div>
+      </div>
+
+      <div class="mt-3 d-none" id="hintBox"><div class="ai-hint" id="hintText"></div></div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultScreen" class="d-none text-center">
+      <div class="py-4">
+        <div style="font-size:48px">🎉</div>
+        <h3 id="finalScore">You scored 0 / 10</h3>
+        <div class="small-muted">Try again or switch level to practise more.</div>
+        <div class="d-flex justify-content-center gap-2 mt-3">
+          <button class="btn btn-primary" id="startAgainBtn">Start Again</button>
+          <button class="btn btn-outline-secondary" id="backHomeBtn">Back to Home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <script>
+    /* ------------------ Questions: edit here ------------------
+       Keep exactly 10 objects in each array (q, opts, a, hint)
+    ----------------------------------------------------------*/
+    const easyQuestions = [
+      { q: "Choose the correct sentence:", opts: ["She don't like apples.", "She doesn't likes apples.", "She doesn't like apples.", "She don't likes apples."], a:2, hint:"Use 'doesn't' + base verb for third person." },
+      { q: "What is a synonym for 'happy'?", opts: ["sad","joyful","angry","dull"], a:1, hint:"Positive emotion similar to 'glad'." },
+      { q: "Which word is stressed in 'I will call you tomorrow'?", opts: ["I","will","call","tomorrow"], a:3, hint:"Focus on the time word." },
+      { q: "What is the plural of 'child'?", opts: ["childs","childes","children","childrens"], a:2, hint:"Irregular plural." },
+      { q: "Fill: 'She ___ a teacher.'", opts: ["are","is","am","be"], a:1, hint:"Third person singular uses 'is'." },
+      { q: "Choose the antonym of 'begin'.", opts: ["start","initiate","end","commence"], a:2, hint:"Opposite of start." },
+      { q: "Pick the correct article: '___ apple a day'", opts: ["A","An","The","No article"], a:1, hint:"Before vowel sound use 'An'." },
+      { q: "Which sentence is polite?", opts: ["Give me that.","Could you pass that, please?","Do it now.","Tell me."], a:1, hint:"Polite uses modal + please." },
+      { q: "What tense: 'She has finished her work.'?", opts: ["Present simple","Present perfect","Past simple","Future"], a:1, hint:"Present perfect." },
+      { q: "Choose the correct preposition: 'I am good ___ math.'", opts: ["on","in","at","for"], a:2, hint:"Common collocation: good at." }
+    ];
+
+    const hardQuestions = [
+      { q: "Choose the sentence with correct subject-verb agreement:", opts: ["The team are celebrating.","The team is celebrating.","The team were celebrating.","The team be celebrating."], a:1, hint:"Collective nouns take singular verb (US style)." },
+      { q: "Choose the correct word: 'She has a _____ of books.'", opts: ["plethora","plethoras","plethor","plethority"], a:0, hint:"Formal word meaning 'many'." },
+      { q: "Which is the correct passive form: 'They deliver the package yesterday.'", opts: ["The package was delivered yesterday.","The package is delivered yesterday.","The package has been deliver yesterday.","Delivered was the package yesterday."], a:0, hint:"Past passive = was/were + past participle." },
+      { q: "Choose the most appropriate word: 'His explanation was _____; I still don't understand.'", opts: ["lucid","opaque","clear","transparent"], a:1, hint:"'Opaque' means not clear." },
+      { q: "Identify the error: 'Neither of the answers are correct.'", opts: ["No error","Use of 'neither'","Use of 'are'","Use of 'correct'"], a:2, hint:"'Neither' is singular — use singular verb." },
+      { q: "Select the word that best completes: 'She is known for her _____ in research.'", opts: ["meticulousness","meticulous","meticulously","meticulosity"], a:0, hint:"Noun form required." },
+      { q: "Choose the best sentence for formal writing:", opts: ["I can't go to the meeting.","I cannot attend the meeting.","I won't be able to go.","I don't think I can make it."], a:1, hint:"Formal writing avoids contractions." },
+      { q: "Which phrase is idiomatic?", opts: ["Make a decision","Do a decision","Hold a decision","Take a choice"], a:0, hint:"'Make a decision' is idiomatic." },
+      { q: "Choose the correct conditional: 'If I ____ you, I would apologize.'", opts: ["am","was","were","be"], a:2, hint:"Subjunctive uses 'were'." },
+      { q: "Select the sentence with correct punctuation:", opts: ["She said, 'I'll be there.'","She said 'I'll be there'.","She said: 'I'll be there'","She said 'I'll be there'."], a:0, hint:"Reporting clause commonly uses a comma." }
+    ];
+
+    /* ------------------ App logic (simple & commented) ------------------ */
+    let pool = [], current = 0, score = 0, chosen = [];
+    const startScreen = document.getElementById('startScreen');
+    const quizScreen = document.getElementById('quizScreen');
+    const resultScreen = document.getElementById('resultScreen');
+    const questionBox = document.getElementById('questionBox');
+    const optionsBox = document.getElementById('optionsBox');
+    const qCounter = document.getElementById('qCounter');
+    const progressBar = document.getElementById('progressBar');
+    const scoreLabel = document.getElementById('scoreLabel');
+    const difficultyLabel = document.getElementById('difficultyLabel');
+    const hintBtn = document.getElementById('hintBtn');
+    const hintBox = document.getElementById('hintBox');
+    const hintText = document.getElementById('hintText');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+
+    document.getElementById('easyCard').addEventListener('click', () => start('Easy'));
+    document.getElementById('hardCard').addEventListener('click', () => start('Hard'));
+    document.getElementById('homeBtn').addEventListener('click', goHome);
+    document.getElementById('startAgainBtn').addEventListener('click', () => start(lastLevel));
+    document.getElementById('backHomeBtn').addEventListener('click', goHome);
+
+    hintBtn.addEventListener('click', () => {
+      if (!pool.length) return;
+      hintText.textContent = pool[current].hint || 'Try eliminating unlikely options.';
+      hintBox.classList.remove('d-none');
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (current < pool.length - 1) { current++; render(); }
+      else finish();
+    });
+    prevBtn.addEventListener('click', () => { if (current>0) { current--; render(); } });
+
+    let lastLevel = 'Easy';
+
+    function start(level){
+      lastLevel = level;
+      startScreen.classList.add('d-none');
+      resultScreen.classList.add('d-none');
+      quizScreen.classList.remove('d-none');
+      difficultyLabel.textContent = level + ' • 10 questions';
+      pool = (level === 'Easy') ? shuffle([...easyQuestions]) : shuffle([...hardQuestions]);
+      pool = pool.slice(0,10);
+      current = 0; score = 0; chosen = Array(pool.length).fill(null);
+      updateScore(); render();
+    }
+
+    function goHome(){
+      quizScreen.classList.add('d-none');
+      resultScreen.classList.add('d-none');
+      startScreen.classList.remove('d-none');
+      progressBar.style.width = '0%';
+    }
+
+    function render(){
+      const item = pool[current];
+      questionBox.textContent = item.q;
+      qCounter.textContent = `Question ${current+1} / ${pool.length}`;
+      progressBar.style.width = `${Math.round((current / pool.length) * 100)}%`;
+      hintBox.classList.add('d-none');
+
+      // build options
+      optionsBox.innerHTML = '';
+      item.opts.forEach((opt, i) => {
+        const col = document.createElement('div'); col.className = 'col-12';
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.type = 'button';
+
+        if (chosen[current] !== null) {
+          btn.disabled = true;
+          if (i === item.a) btn.classList.add('correct');
+          if (i === chosen[current] && chosen[current] !== item.a) btn.classList.add('wrong');
+        } else {
+          btn.addEventListener('click', () => choose(i, btn));
+        }
+
+        col.appendChild(btn);
+        optionsBox.appendChild(col);
+      });
+
+      prevBtn.disabled = current === 0;
+      nextBtn.textContent = (current === pool.length - 1) ? 'Finish' : 'Next';
+    }
+
+    function choose(index, btn){
+      const item = pool[current];
+      document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+      chosen[current] = index;
+      if (index === item.a){
+        btn.classList.add('correct');
+        score++; updateScore();
+      } else {
+        btn.classList.add('wrong');
+        // highlight correct button by matching text
+        Array.from(document.querySelectorAll('.option-btn')).forEach(b => {
+          if (b.textContent === item.opts[item.a]) b.classList.add('correct');
+        });
+      }
+    }
+
+    function updateScore(){ scoreLabel.textContent = score; }
+
+    function finish(){
+      quizScreen.classList.add('d-none');
+      resultScreen.classList.remove('d-none');
+      document.getElementById('finalScore').textContent = `You scored ${score} / ${pool.length}`;
+      progressBar.style.width = '100%';
+    }
+
+    function shuffle(arr){
+      for (let i = arr.length -1; i>0; i--){
+        const j = Math.floor(Math.random() * (i+1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    //  Enter for Next
+    document.addEventListener('keydown', (e) => {
+      if (!quizScreen.classList.contains('d-none') && e.key === 'Enter') nextBtn.click();
+    });let report = JSON.parse(localStorage.getItem("quizReport")) || [];
+report.push({ level: "Easy", score: 8, total: 10, date: new Date().toLocaleDateString() });
+localStorage.setItem("quizReport", JSON.stringify(report));
+
+
+
+  </script>
+
+
+
+
+<!-- Button to open BrainFizz -->
+<button id="play-game-btn" type="button">Play BrainFizz</button>
+
+
+<!-- Modal -->
+<div id="game-modal" style="display: none;">
+  <div id="game-content">
+    <button id="close-modal">×</button>
+    <p style="text-align:right; font-weight:bold; display: flex;">⏱ Time: <span id="timer">60</span>s</p>
+    <div id="chat-window"></div>
+    <input type="text" id="user-answer" placeholder="Type your answer...">
+    <div style="margin-top:10px;">
+      <button id="next-word">Skip Word</button>
+    </div>
+    <p style="margin-top:10px; font-weight:bold;">Score: <span id="score">0</span></p>
+  </div>
+</div>
+
+
+
+  <script src="./quiz.js"></script>
+  
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
